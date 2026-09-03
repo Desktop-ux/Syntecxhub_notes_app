@@ -101,7 +101,7 @@ function App() {
       <header className="navbar">
         <div className="logo">
           <span>✎</span>
-          <h1>Notes App</h1>
+          <h1>Mino</h1>
         </div>
 
         <button
