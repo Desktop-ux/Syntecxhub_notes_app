@@ -1,10 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import NoteForm from "./Components/NotesForm";
+import NoteItem from "./Components/Notesitem";
+import SearchBar from "./Components/Searchbar";
 import "./App.css";
 
 function App() {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(() => {
+    const savedNotes = localStorage.getItem("notes");
+
+    return savedNotes ? JSON.parse(savedNotes) : [];
+  });
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
   const addNote = () => {
     if (!title.trim() || !content.trim()) {
@@ -23,6 +37,55 @@ function App() {
     setTitle("");
     setContent("");
   };
+
+  const editNote = (note) => {
+    setTitle(note.title);
+    setContent(note.content);
+    setEditingId(note.id);
+  };
+
+  const updateNote = () => {
+    if (!title.trim() || !content.trim()) {
+      return;
+    }
+
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === editingId
+          ? {
+              ...note,
+              title: title.trim(),
+              content: content.trim(),
+            }
+          : note
+      )
+    );
+
+    setTitle("");
+    setContent("");
+    setEditingId(null);
+  };
+
+  const deleteNote = (id) => {
+    setNotes((prevNotes) =>
+      prevNotes.filter((note) => note.id !== id)
+    );
+  };
+
+  const clearForm = () => {
+    setTitle("");
+    setContent("");
+    setEditingId(null);
+  };
+
+  const filteredNotes = notes.filter((note) => {
+    const search = searchTerm.toLowerCase();
+
+    return (
+      note.title.toLowerCase().includes(search) ||
+      note.content.toLowerCase().includes(search)
+    );
+  });
 
   return (
     <div className="app">
@@ -44,39 +107,22 @@ function App() {
         </section>
 
         <section className="workspace">
-          <div className="editor">
-            <input
-              type="text"
-              placeholder="Note title..."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-
-            <textarea
-              placeholder="Write your note here..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-
-            <div className="editor-actions">
-              <button className="add-button" onClick={addNote}>
-                ＋ Add Note
-              </button>
-
-              <button
-                className="clear-button"
-                onClick={() => {
-                  setTitle("");
-                  setContent("");
-                }}
-              >
-                🗑 Clear
-              </button>
-            </div>
-          </div>
+          <NoteForm
+            title={title}
+            content={content}
+            editingId={editingId}
+            setTitle={setTitle}
+            setContent={setContent}
+            addNote={addNote}
+            updateNote={updateNote}
+            clearForm={clearForm}
+          />
 
           <aside className="sidebar">
-            <input type="text" placeholder="⌕  Search notes..." />
+            <SearchBar
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+            />
 
             <div className="tips">
               <h3>💡 Tips</h3>
@@ -87,18 +133,26 @@ function App() {
         </section>
 
         <section className="notes">
-          {notes.length === 0 ? (
+          {filteredNotes.length === 0 ? (
             <div className="empty-state">
-              <h3>No notes yet</h3>
-              <p>Create your first note above.</p>
+              <h3>
+                {searchTerm ? "No notes found" : "No notes yet"}
+              </h3>
+
+              <p>
+                {searchTerm
+                  ? "Try searching for something else."
+                  : "Create your first note above."}
+              </p>
             </div>
           ) : (
-            notes.map((note) => (
-              <article className="note-card" key={note.id}>
-                <h3>{note.title}</h3>
-                <p>{note.content}</p>
-                <small>{note.createdAt}</small>
-              </article>
+            filteredNotes.map((note) => (
+              <NoteItem
+                key={note.id}
+                note={note}
+                editNote={editNote}
+                deleteNote={deleteNote}
+              />
             ))
           )}
         </section>
