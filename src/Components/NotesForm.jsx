@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 function NoteForm({
   title,
   content,
@@ -8,9 +10,16 @@ function NoteForm({
   updateNote,
   clearForm,
 }) {
+  const titleInputRef = useRef(null);
+
+  useEffect(() => {
+    titleInputRef.current?.focus();
+  }, [editingId]);
+
   return (
     <div className="editor">
       <input
+        ref={titleInputRef}
         type="text"
         placeholder="Note title..."
         value={title}

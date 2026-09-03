@@ -10,9 +10,14 @@ function App() {
 
     return savedNotes ? JSON.parse(savedNotes) : [];
   });
+ 
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("darkMode") === "true";
+  });
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+
   const [editingId, setEditingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -53,10 +58,10 @@ function App() {
       prevNotes.map((note) =>
         note.id === editingId
           ? {
-              ...note,
-              title: title.trim(),
-              content: content.trim(),
-            }
+            ...note,
+            title: title.trim(),
+            content: content.trim(),
+          }
           : note
       )
     );
@@ -78,6 +83,10 @@ function App() {
     setEditingId(null);
   };
 
+  useEffect(() => {
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
+
   const filteredNotes = notes.filter((note) => {
     const search = searchTerm.toLowerCase();
 
@@ -88,15 +97,19 @@ function App() {
   });
 
   return (
-    <div className="app">
+    <div className={`app ${darkMode ? "dark" : ""}`}>
       <header className="navbar">
         <div className="logo">
           <span>✎</span>
           <h1>Notes App</h1>
         </div>
 
-        <button className="theme-button">
-          ☾ <span>Dark Mode</span>
+        <button
+          className="theme-button"
+          onClick={() => setDarkMode((prev) => !prev)}
+        >
+          {darkMode ? "☀" : "☾"}
+          <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
         </button>
       </header>
 

@@ -226,3 +226,87 @@ footer {
   background: #f5f3ff;
 }
 
+.app.dark {
+  background: #111827;
+  color: #f9fafb;
+  min-height: 100vh;
+}
+
+.app.dark .hero h2 {
+  color: #f9fafb;
+}
+
+.app.dark .hero p {
+  color: #9ca3af;
+}
+
+.app.dark .workspace {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.app.dark .editor {
+  border-color: #374151;
+}
+
+.app.dark .editor input,
+.app.dark .editor textarea,
+.app.dark .sidebar > input {
+  background: #111827;
+  color: #f9fafb;
+  border-color: #374151;
+}
+
+.app.dark .editor input::placeholder,
+.app.dark .editor textarea::placeholder,
+.app.dark .sidebar > input::placeholder {
+  color: #9ca3af;
+}
+
+.app.dark .clear-button {
+  background: #1f2937;
+  color: #f9fafb;
+  border-color: #374151;
+}
+
+.app.dark .tips {
+  background: #27203f;
+  border-color: #5b3fd3;
+}
+
+.app.dark .tips p {
+  color: #d1d5db;
+}
+
+.app.dark .note-card {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.app.dark .note-card h3 {
+  color: #f9fafb;
+}
+
+.app.dark .note-card p {
+  color: #d1d5db;
+}
+
+.app.dark .note-actions button {
+  background: #111827;
+  color: #f9fafb;
+  border-color: #374151;
+}
+
+.app.dark .note-actions button:hover {
+  background: #312e81;
+}
+
+.app.dark .empty-state {
+  border-color: #374151;
+  color: #9ca3af;
+}
+
+.app.dark footer {
+  border-color: #374151;
+  color: #9ca3af;
+}
