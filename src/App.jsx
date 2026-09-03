@@ -171,7 +171,7 @@ function App() {
         </section>
       </main>
 
-      <footer>Made with 💜 using React</footer>
+      <footer>LET HIM COOK!!!</footer>
     </div>
   );
 }
